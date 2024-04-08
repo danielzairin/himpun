@@ -34,3 +34,5 @@ export const profiles = pgTable("profiles", {
   name: varchar("name", { length: 256 }).notNull(),
   state: stateEnum("state").notNull(),
 });
+
+export * as s from "./schema";
