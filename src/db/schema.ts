@@ -1,4 +1,25 @@
-import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+
+export const states = [
+  "Johor",
+  "Kedah",
+  "Kelantan",
+  "Malacca",
+  "Negeri Sembilan",
+  "Pahang",
+  "Penang",
+  "Perak",
+  "Perlis",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+  "Kuala Lumpur",
+  "Labuan",
+  "Putrajaya",
+] as const;
+
+export const stateEnum = pgEnum("state", states);
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -11,4 +32,5 @@ export const users = pgTable("users", {
 export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }).notNull(),
+  state: stateEnum("state").notNull(),
 });

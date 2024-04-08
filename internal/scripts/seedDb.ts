@@ -1,7 +1,7 @@
 import "dotenv/config";
 
-import { db } from "@/db";
-import { profiles, users } from "@/db/schema";
+import { client, db } from "@/db";
+import { profiles, states, users } from "@/db/schema";
 import { faker } from "@faker-js/faker";
 
 const NUM_USERS = 100;
@@ -11,6 +11,7 @@ async function main() {
 
   for (let i = 0; i < NUM_USERS; i++) {
     fakeProfiles.push({
+      state: states[Math.floor(Math.random() * states.length)],
       name: faker.person.fullName(),
     });
   }
@@ -35,4 +36,7 @@ async function main() {
 }
 
 console.log("seeding database...");
-main().then(() => "seeding finished...");
+main().then(async () => {
+  console.log("seeding finished...");
+  await client.end();
+});

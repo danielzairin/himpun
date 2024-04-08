@@ -5,6 +5,6 @@ if (!process.env.DB_URL) {
   throw Error("missing environment variable 'DB_URL'");
 }
 
-const queryClient = postgres(process.env.DB_URL);
+export const client = postgres(process.env.DB_URL);
 
-export const db = drizzle(queryClient);
+export const db = drizzle(client);
