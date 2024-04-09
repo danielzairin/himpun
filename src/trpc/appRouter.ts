@@ -1,4 +1,4 @@
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { s } from "@/db/schema";
 import { publicProcedure, router } from "./init";
 import { z } from "zod";
@@ -8,15 +8,21 @@ const profiles = router({
     .input(
       z
         .object({
+          state: z.enum(s.states).default("Penang"),
           max: z.number().int().min(0).max(100).default(100),
         })
         .optional()
         .default({
+          state: "Penang",
           max: 100,
         })
     )
     .query(async ({ ctx, input }) => {
-      return ctx.db.select().from(s.profiles).limit(input.max);
+      return ctx.db
+        .select()
+        .from(s.profiles)
+        .where(eq(s.profiles.state, input.state))
+        .limit(input.max);
     }),
 });
 

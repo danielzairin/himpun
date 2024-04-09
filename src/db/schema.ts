@@ -19,6 +19,8 @@ export const states = [
   "Putrajaya",
 ] as const;
 
+export type State = (typeof states)[number];
+
 export const stateEnum = pgEnum("state", states);
 
 export const users = pgTable("users", {
