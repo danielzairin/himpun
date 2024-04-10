@@ -2,36 +2,52 @@
 
 import { State, states } from "@/db/schema";
 import { trpc } from "@/trpc/client";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-export default function ProfileList() {
+type Props = {
+  className?: string;
+};
+
+export default function ProfileList({ className }: Props) {
   const [state, setState] = useState<State>("Penang");
   const profilesQuery = trpc.profiles.list.useQuery({ max: 10, state });
 
   return (
-    <>
-      <label htmlFor="state">State</label>
-      <div>
-        <select
-          id="state"
-          value={state}
-          onChange={(e) => setState(e.target.value as State)}
-        >
+    <div className={cn(className)}>
+      <p className="mb-2">Filter by state:</p>
+      <Select value={state} onValueChange={(value) => setState(value as State)}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a state" />
+        </SelectTrigger>
+        <SelectContent>
           {states.map((s) => (
-            <option key={s} value={s}>
+            <SelectItem key={s} value={s}>
               {s}
-            </option>
+            </SelectItem>
           ))}
-        </select>
-      </div>
-      <ol>
+        </SelectContent>
+      </Select>
+      <ol className="flex gap-2 flex-col my-4 max-w-lg">
         {profilesQuery.data &&
           profilesQuery.data.map((profile) => (
-            <li key={profile.id}>
-              {profile.name} from {profile.state}
+            <li
+              key={profile.id}
+              className="bg-secondary block border px-4 py-2 rounded"
+            >
+              <p className="text-lg">
+                {profile.name} from {profile.state}
+              </p>
             </li>
           ))}
       </ol>
-    </>
+    </div>
   );
 }

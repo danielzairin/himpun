@@ -15,7 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/trpc`,
         }),
       ],
-    })
+    }),
   );
 
   return (

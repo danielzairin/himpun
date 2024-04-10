@@ -15,7 +15,7 @@ const profiles = router({
         .default({
           state: "Penang",
           max: 100,
-        })
+        }),
     )
     .query(async ({ ctx, input }) => {
       return ctx.db
