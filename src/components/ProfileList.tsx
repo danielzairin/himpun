@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { State, states } from "@/db/schema";
 import { trpc } from "@/trpc/client";
 import {
@@ -16,12 +17,17 @@ type Props = {
   className?: string;
 };
 
+const Map = dynamic(() => import("./Map"), { ssr: false });
+
 export default function ProfileList({ className }: Props) {
   const [state, setState] = useState<State>("Penang");
   const profilesQuery = trpc.profiles.list.useQuery({ max: 10, state });
 
   return (
     <div className={cn(className)}>
+      <div className="mb-2">
+        <Map />
+      </div>
       <p className="mb-2">Filter by state:</p>
       <Select value={state} onValueChange={(value) => setState(value as State)}>
         <SelectTrigger className="w-[180px]">
