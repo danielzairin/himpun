@@ -1,11 +1,13 @@
 "use client";
 
 import { State, states } from "@/db/schema";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
+import { useEffect } from "react";
 
 type Props = {
   onStateClick: (state: State) => void;
+  selectedState?: State;
 };
 
 const STATE_POSITION: Record<State, [number, number]> = {
@@ -27,7 +29,7 @@ const STATE_POSITION: Record<State, [number, number]> = {
   Terengganu: [5.3283, 103.1412],
 };
 
-export default function Map({ onStateClick }: Props) {
+export default function Map({ onStateClick, selectedState }: Props) {
   return (
     <MapContainer
       center={[3.659996, 107.262817]}
@@ -49,6 +51,21 @@ export default function Map({ onStateClick }: Props) {
           })}
         ></Marker>
       ))}
+      <ZoomToState selectedState={selectedState} />
     </MapContainer>
   );
+}
+
+function ZoomToState({ selectedState }: Pick<Props, "selectedState">) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!selectedState) {
+      return;
+    }
+    map.setZoom(12);
+    map.panTo(STATE_POSITION[selectedState], { animate: true });
+  }, [selectedState]);
+
+  return <></>;
 }

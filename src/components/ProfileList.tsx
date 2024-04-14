@@ -55,7 +55,7 @@ export default function ProfileList({ className }: Props) {
         </ol>
       </div>
       <div className="mb-2 flex-1">
-        <Map onStateClick={setState} />
+        <Map onStateClick={setState} selectedState={state} />
       </div>
     </div>
   );
