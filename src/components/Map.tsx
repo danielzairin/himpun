@@ -30,10 +30,9 @@ const STATE_POSITION: Record<State, [number, number]> = {
 export default function Map({ onStateClick }: Props) {
   return (
     <MapContainer
-      center={[5.4141, 100.328]}
-      zoom={13}
-      scrollWheelZoom={false}
-      className="h-96 rounded-lg shadow-lg"
+      center={[3.659996, 107.262817]}
+      zoom={6}
+      className="h-full rounded-lg shadow-lg"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
