@@ -26,7 +26,7 @@ export default function ProfileList({ className }: Props) {
   return (
     <div className={cn(className)}>
       <div className="mb-2">
-        <Map />
+        <Map onStateClick={setState} />
       </div>
       <p className="mb-2">Filter by state:</p>
       <Select value={state} onValueChange={(value) => setState(value as State)}>
