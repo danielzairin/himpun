@@ -1,13 +1,20 @@
 "use client";
 
 import { State, states } from "@/db/schema";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMap,
+  Tooltip,
+} from "react-leaflet";
 import L from "leaflet";
 import { useEffect } from "react";
 
 type Props = {
   onStateClick: (state: State) => void;
   selectedState?: State;
+  stateInfo?: Record<State, string>;
 };
 
 const STATE_POSITION: Record<State, [number, number]> = {
@@ -29,7 +36,7 @@ const STATE_POSITION: Record<State, [number, number]> = {
   Terengganu: [5.3283, 103.1412],
 };
 
-export default function Map({ onStateClick, selectedState }: Props) {
+export default function Map({ onStateClick, selectedState, stateInfo }: Props) {
   return (
     <MapContainer
       center={[3.659996, 107.262817]}
@@ -41,15 +48,23 @@ export default function Map({ onStateClick, selectedState }: Props) {
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {states.map((state) => (
-        <Marker
-          position={STATE_POSITION[state]}
-          eventHandlers={{ click: () => onStateClick(state) }}
-          icon={L.icon({
-            iconUrl: `flags/${state}.svg`,
-            iconSize: [60, 30],
-            className: "border-2 border-black border-opacity-20",
-          })}
-        ></Marker>
+        <>
+          <Marker
+            position={STATE_POSITION[state]}
+            eventHandlers={{ click: () => onStateClick(state) }}
+            icon={L.icon({
+              iconUrl: `flags/${state}.svg`,
+              iconSize: [60, 30],
+              className: "border-2 border-black border-opacity-20",
+            })}
+          >
+            {stateInfo && stateInfo[state] && (
+              <Tooltip direction="top" offset={[0, -10]}>
+                {stateInfo[state]}
+              </Tooltip>
+            )}
+          </Marker>
+        </>
       ))}
       <ZoomToState selectedState={selectedState} />
     </MapContainer>
