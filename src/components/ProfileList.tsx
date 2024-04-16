@@ -17,11 +17,27 @@ type Props = {
   className?: string;
 };
 
-const Map = dynamic(() => import("./Map"), { ssr: false });
+const ProfileMap = dynamic(() => import("./Map"), { ssr: false });
 
 export default function ProfileList({ className }: Props) {
   const [state, setState] = useState<State>("Penang");
+
   const profilesQuery = trpc.profiles.list.useQuery({ max: 10, state });
+
+  const profilesCount = trpc.profiles.count.useQuery(undefined, {
+    select: (data) => {
+      const stateToCount = new Map<State, string>();
+
+      for (const { state, count } of data) {
+        stateToCount.set(state, `There are ${count} profiles in this area.`);
+      }
+
+      return Object.fromEntries(stateToCount.entries()) as Record<
+        State,
+        string
+      >;
+    },
+  });
 
   return (
     <div className={cn(className, "flex gap-4")}>
@@ -55,7 +71,11 @@ export default function ProfileList({ className }: Props) {
         </ol>
       </div>
       <div className="mb-2 flex-1">
-        <Map onStateClick={setState} selectedState={state} />
+        <ProfileMap
+          onStateClick={setState}
+          selectedState={state}
+          stateInfo={profilesCount.data}
+        />
       </div>
     </div>
   );

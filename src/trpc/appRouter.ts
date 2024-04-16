@@ -15,7 +15,7 @@ const profiles = router({
         .default({
           state: "Penang",
           max: 100,
-        }),
+        })
     )
     .query(async ({ ctx, input }) => {
       return ctx.db
@@ -24,6 +24,12 @@ const profiles = router({
         .where(eq(s.profiles.state, input.state))
         .limit(input.max);
     }),
+  count: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({ state: s.profiles.state, count: count() })
+      .from(s.profiles)
+      .groupBy(s.profiles.state);
+  }),
 });
 
 export const appRouter = router({
